@@ -5,9 +5,36 @@
 }
 
 <div class="text-center mt-5">
-    <form class="d-flex justify-content-center mb-4">
-        <input class="form-control w-50" type="search" placeholder="Zoeken..." aria-label="Zoeken">
+    <form method="post" asp-page-handler="Search" class="d-flex justify-content-center mb-4">
+        <input name="SearchTerm" value="@Model.SearchTerm" class="form-control w-50" type="search" placeholder="Zoeken..." aria-label="Zoeken">
         <button class="btn btn-primary ms-2" type="submit">Zoek</button>
     </form>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+
     <h1>Welkom bij Matrix Inc!</h1>
+
+    <div class="container mt-4">
+        <div class="row">
+            @foreach (var p in Model.Products)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@p.Name</h5>
+                            <p class="card-text">@p.Description</p>
+                            <p class="card-text">Prijs: &euro;@p.Price</p>
+                            <form method="post" asp-page-handler="AddToCart">
+                                <input type="hidden" name="productId" value="@p.Id" />
+                                <button class="btn btn-success" type="submit">Voeg toe aan winkelwagen</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>

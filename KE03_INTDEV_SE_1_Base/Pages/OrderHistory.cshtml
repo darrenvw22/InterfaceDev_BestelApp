@@ -4,4 +4,26 @@
     ViewData["Title"] = "Mijn orderhistorie";
 }
 <h1>Mijn orderhistorie</h1>
-<p>Deze pagina is nog leeg.</p>
+
+@if (!Model.Orders.Any())
+{
+    <p>Geen orders gevonden.</p>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var o in Model.Orders)
+        {
+            <div class="list-group-item mb-2">
+                <h5>Order #@o.Id - @o.OrderDate.ToString("g")</h5>
+                <p>Klant: @o.Customer?.Name</p>
+                <ul>
+                    @foreach (var p in o.Products)
+                    {
+                        <li>@p.Name &mdash; &euro;@p.Price</li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+}

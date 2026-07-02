@@ -4,4 +4,54 @@
     ViewData["Title"] = "Winkelmandje";
 }
 <h1>Winkelmandje</h1>
-<p>Deze pagina is nog leeg.</p>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">@TempData["Message"]</div>
+}
+
+@if (!Model.Items.Any())
+{
+    <p>Winkelwagen is leeg.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Prijs</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var it in Model.Items)
+            {
+                <tr>
+                    <td>@it.Name</td>
+                    <td>&euro;@it.Price</td>
+                    <td>
+                        <form method="post" asp-page-handler="Remove">
+                            <input type="hidden" name="productId" value="@it.Id" />
+                            <button class="btn btn-sm btn-danger" type="submit">Verwijder</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <form method="post" asp-page-handler="PlaceOrder">
+        <div class="mb-3">
+            <label for="customer" class="form-label">Selecteer klant</label>
+            <select asp-for="SelectedCustomerId" class="form-select" id="customer">
+                <option value="0">-- Kies klant --</option>
+                @foreach (var c in Model.Customers)
+                {
+                    <option value="@c.Id">@c.Name</option>
+                }
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Plaats order</button>
+    </form>
+}
